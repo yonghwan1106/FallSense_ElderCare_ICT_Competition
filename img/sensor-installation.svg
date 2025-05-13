@@ -1,0 +1,400 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 및 스타일 정의 -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f9fa"/>
+      <stop offset="100%" stop-color="#e9ecef"/>
+    </linearGradient>
+    
+    <linearGradient id="bathroom-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4dabf7"/>
+      <stop offset="100%" stop-color="#228be6"/>
+    </linearGradient>
+    
+    <linearGradient id="bedroom-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffa94d"/>
+      <stop offset="100%" stop-color="#fd7e14"/>
+    </linearGradient>
+    
+    <linearGradient id="livingroom-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a29bfe"/>
+      <stop offset="100%" stop-color="#7950f2"/>
+    </linearGradient>
+    
+    <linearGradient id="kitchen-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#66d9e8"/>
+      <stop offset="100%" stop-color="#15aabf"/>
+    </linearGradient>
+    
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+    
+    <filter id="sensor-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feFlood flood-color="#fa5252" flood-opacity="0.3" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="shadow"/>
+      <feComposite in="SourceGraphic" in2="shadow" operator="over"/>
+    </filter>
+    
+    <!-- 센서 아이콘들 -->
+    <symbol id="pir-sensor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5" fill="#fa5252" stroke="#c92a2a" stroke-width="1.5"/>
+      <path d="M12 3 L12 6 M12 18 L12 21 M21 12 L18 12 M6 12 L3 12 M18 6 L16 8 M8 16 L6 18 M18 18 L16 16 M8 8 L6 6" 
+        stroke="#c92a2a" stroke-width="1.2" opacity="0.8"/>
+      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite"/>
+    </symbol>
+    
+    <symbol id="pressure-sensor" viewBox="0 0 24 24">
+      <rect x="6" y="10" width="12" height="8" rx="1" ry="1" fill="#fa5252" stroke="#c92a2a" stroke-width="1.5"/>
+      <path d="M8 10 L8 6 A4 4 0 0 1 16 6 L16 10" stroke="#c92a2a" stroke-width="1.2" fill="none"/>
+      <path d="M12 14 L12 18 M10 18 L14 18" stroke="#c92a2a" stroke-width="1.2"/>
+    </symbol>
+    
+    <symbol id="motion-sensor" viewBox="0 0 24 24">
+      <rect x="8" y="8" width="8" height="8" rx="1" ry="1" fill="#fa5252" stroke="#c92a2a" stroke-width="1.5"/>
+      <path d="M5 5 L8 8 M19 5 L16 8 M5 19 L8 16 M19 19 L16 16" stroke="#c92a2a" stroke-width="1.2"/>
+      <circle cx="12" cy="12" r="3" fill="#c92a2a"/>
+    </symbol>
+    
+    <symbol id="sound-sensor" viewBox="0 0 24 24">
+      <circle cx="8" cy="12" r="4" fill="#fa5252" stroke="#c92a2a" stroke-width="1.5"/>
+      <path d="M14 6 A10 10 0 0 1 14 18 M17 8 A6 6 0 0 1 17 16" stroke="#c92a2a" stroke-width="1.2" fill="none"/>
+    </symbol>
+  </defs>
+  
+  <!-- 배경 -->
+  <rect width="800" height="600" fill="url(#bg-gradient)" rx="10" ry="10"/>
+  
+  <!-- 제목 -->
+  <g id="title">
+    <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#343a40">FallSense - 센서 설치 위치 안내</text>
+    <text x="400" y="65" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#495057">공간별 낙상·이상행동 감지 센서 설치 가이드</text>
+  </g>
+  
+  <!-- 화장실 설치 영역 -->
+  <g id="bathroom-installation" transform="translate(50, 80)">
+    <rect width="340" height="230" fill="#e7f5ff" stroke="#74c0fc" stroke-width="2" rx="10" ry="10" filter="url(#soft-shadow)"/>
+    
+    <!-- 화장실 제목 -->
+    <g>
+      <rect width="340" height="30" fill="url(#bathroom-gradient)" rx="10" ry="10"/>
+      <text x="170" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">화장실 설치 가이드</text>
+      <!-- 물방울 아이콘 -->
+      <path d="M140 15 A5 5 0 0 0 140 15 Z" fill="#ffffff"/>
+    </g>
+    
+    <!-- 화장실 그림 -->
+    <rect x="20" y="40" width="300" height="170" fill="#e9ecef" stroke="#ced4da" stroke-width="1" rx="5" ry="5"/>
+    
+    <!-- 욕조 -->
+    <rect x="35" y="120" width="150" height="80" fill="#adb5bd" rx="5" ry="5"/>
+    <rect x="40" y="125" width="140" height="70" fill="#ced4da" rx="3" ry="3"/>
+    
+    <!-- 세면대 -->
+    <rect x="220" y="120" width="80" height="50" fill="#adb5bd" rx="3" ry="3"/>
+    <circle cx="260" cy="145" r="15" fill="#ced4da"/>
+    
+    <!-- 변기 -->
+    <rect x="220" y="50" width="80" height="50" fill="#adb5bd" rx="10" ry="10"/>
+    <rect x="230" y="60" width="60" height="25" fill="#f8f9fa" rx="10" ry="10"/>
+    
+    <!-- 센서 설치 위치 표시 -->
+    <!-- 화장실 센서 1: 천장 모서리 -->
+    <g transform="translate(40, 60)" filter="url(#sensor-glow)">
+      <use href="#pir-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">1</text>
+    </g>
+    
+    <line x1="52" y1="72" x2="90" y2="72" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="90" y="62" width="140" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="160" y="76" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">천장 모서리 PIR 센서 (동작 감지)</text>
+    
+    <!-- 화장실 센서 2: 욕조 근처 -->
+    <g transform="translate(50, 110)" filter="url(#sensor-glow)">
+      <use href="#pressure-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="1s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">2</text>
+    </g>
+    
+    <line x1="62" y1="122" x2="100" y2="100" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="100" y="90" width="140" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="170" y="104" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">욕조 주변 압력 센서 (낙상 감지)</text>
+    
+    <!-- 화장실 센서 3: 변기 근처 -->
+    <g transform="translate(210, 50)" filter="url(#sensor-glow)">
+      <use href="#sound-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="2s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">3</text>
+    </g>
+    
+    <line x1="210" y1="62" x2="160" y2="40" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="20" y="30" width="140" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="90" y="44" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">변기 주변 소리 센서 (이상징후 감지)</text>
+    
+    <!-- 설치 가이드 노트 -->
+    <rect x="20" y="180" width="300" height="40" fill="rgba(255,255,255,0.8)" stroke="#74c0fc" stroke-width="1" rx="5" ry="5"/>
+    <text x="170" y="192" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#1971c2">설치 권장사항</text>
+    <text x="170" y="208" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#495057">욕실은 낙상 위험이 가장 높은 공간으로, 천장 및 벽면 센서 위주로 설치합니다.</text>
+    <text x="170" y="218" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#495057">방수 케이스를 사용하여 습기로부터 센서를 보호해야 합니다.</text>
+  </g>
+  
+  <!-- 침실 설치 영역 -->
+  <g id="bedroom-installation" transform="translate(410, 80)">
+    <rect width="340" height="230" fill="#fff4e6" stroke="#ffa94d" stroke-width="2" rx="10" ry="10" filter="url(#soft-shadow)"/>
+    
+    <!-- 침실 제목 -->
+    <g>
+      <rect width="340" height="30" fill="url(#bedroom-gradient)" rx="10" ry="10"/>
+      <text x="170" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">침실 설치 가이드</text>
+      <!-- 침대 아이콘 -->
+      <path d="M140 15 A5 5 0 0 0 140 15 Z" fill="#ffffff"/>
+    </g>
+    
+    <!-- 침실 그림 -->
+    <rect x="20" y="40" width="300" height="170" fill="#e9ecef" stroke="#ced4da" stroke-width="1" rx="5" ry="5"/>
+    
+    <!-- 침대 -->
+    <rect x="40" y="90" width="170" height="100" fill="#adb5bd" rx="5" ry="5"/>
+    <rect x="45" y="95" width="160" height="90" fill="#ced4da" rx="3" ry="3"/>
+    <rect x="45" y="70" width="70" height="20" fill="#868e96" rx="3" ry="3"/>
+    
+    <!-- 옷장 -->
+    <rect x="240" y="50" width="60" height="150" fill="#adb5bd" rx="3" ry="3"/>
+    <line x1="270" y1="50" x2="270" y2="200" stroke="#868e96" stroke-width="1"/>
+    <circle cx="265" cy="125" r="3" fill="#495057"/>
+    <circle cx="275" cy="125" r="3" fill="#495057"/>
+    
+    <!-- 센서 설치 위치 표시 -->
+    <!-- 침실 센서 1: 천장 중앙 -->
+    <g transform="translate(170, 60)" filter="url(#sensor-glow)">
+      <use href="#motion-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">1</text>
+    </g>
+    
+    <line x1="182" y1="72" x2="220" y2="72" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="220" y="62" width="110" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="275" y="76" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">천장 모션 센서</text>
+    
+    <!-- 침실 센서 2: 침대 옆 -->
+    <g transform="translate(230, 110)" filter="url(#sensor-glow)">
+      <use href="#pressure-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="1s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">2</text>
+    </g>
+    
+    <line x1="230" y1="122" x2="190" y2="100" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="90" y="90" width="110" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="145" y="104" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">침대 주변 압력 센서</text>
+    
+    <!-- 침실 센서 3: 침대 앞 -->
+    <g transform="translate(120, 160)" filter="url(#sensor-glow)">
+      <use href="#pir-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="2s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">3</text>
+    </g>
+    
+    <line x1="132" y1="148" x2="132" y2="120" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="150" y="148" width="140" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="220" y="162" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">침대 앞 동작 감지 센서</text>
+    
+    <!-- 설치 가이드 노트 -->
+    <rect x="20" y="180" width="300" height="40" fill="rgba(255,255,255,0.8)" stroke="#ffa94d" stroke-width="1" rx="5" ry="5"/>
+    <text x="170" y="192" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">설치 권장사항</text>
+    <text x="170" y="208" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#495057">침실에서는 취침/기상 활동을 감지하기 위해 침대 주변에 집중 설치합니다.</text>
+    <text x="170" y="218" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#495057">천장 센서는 야간 활동을 모니터링하는 데 중요합니다.</text>
+  </g>
+  
+  <!-- 거실 설치 영역 -->
+  <g id="livingroom-installation" transform="translate(50, 330)">
+    <rect width="340" height="250" fill="#f3f0ff" stroke="#b197fc" stroke-width="2" rx="10" ry="10" filter="url(#soft-shadow)"/>
+    
+    <!-- 거실 제목 -->
+    <g>
+      <rect width="340" height="30" fill="url(#livingroom-gradient)" rx="10" ry="10"/>
+      <text x="170" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">거실 설치 가이드</text>
+      <!-- 소파 아이콘 -->
+      <path d="M140 15 A5 5 0 0 0 140 15 Z" fill="#ffffff"/>
+    </g>
+    
+    <!-- 거실 그림 -->
+    <rect x="20" y="40" width="300" height="170" fill="#e9ecef" stroke="#ced4da" stroke-width="1" rx="5" ry="5"/>
+    
+    <!-- 소파 -->
+    <rect x="35" y="140" width="150" height="70" fill="#adb5bd" rx="5" ry="5"/>
+    <rect x="40" y="145" width="140" height="60" fill="#ced4da" rx="3" ry="3"/>
+    <rect x="40" y="120" width="140" height="25" fill="#ced4da" rx="3" ry="3"/>
+    
+    <!-- TV/가구 -->
+    <rect x="220" y="150" width="80" height="30" fill="#adb5bd" rx="3" ry="3"/>
+    <rect x="235" y="120" width="50" height="30" fill="#868e96" rx="2" ry="2"/>
+    
+    <!-- 테이블 -->
+    <rect x="120" y="90" width="80" height="40" fill="#adb5bd" rx="3" ry="3"/>
+    <circle cx="160" cy="110" r="25" fill="#ced4da"/>
+    
+    <!-- 센서 설치 위치 표시 -->
+    <!-- 거실 센서 1: 천장 중앙 -->
+    <g transform="translate(170, 60)" filter="url(#sensor-glow)">
+      <use href="#motion-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">1</text>
+    </g>
+    
+    <line x1="182" y1="72" x2="220" y2="72" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="220" y="62" width="90" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="265" y="76" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">천장 모션 센서</text>
+    
+    <!-- 거실 센서 2: 소파 근처 -->
+    <g transform="translate(45, 120)" filter="url(#sensor-glow)">
+      <use href="#pir-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="1s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">2</text>
+    </g>
+    
+    <line x1="57" y1="132" x2="95" y2="90" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="95" y="80" width="100" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="145" y="94" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">소파 주변 동작 센서</text>
+    
+    <!-- 거실 센서 3: 출입구 -->
+    <g transform="translate(260, 180)" filter="url(#sensor-glow)">
+      <use href="#sound-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="2s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">3</text>
+    </g>
+    
+    <line x1="272" y1="180" x2="220" y2="160" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="120" y="150" width="100" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="170" y="164" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">출입구 소리 센서</text>
+    
+    <!-- 설치 가이드 노트 -->
+    <rect x="20" y="220" width="300" height="20" fill="rgba(255,255,255,0.8)" stroke="#b197fc" stroke-width="1" rx="5" ry="5"/>
+    <text x="170" y="234" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#495057">거실은 활동량이 많은 공간으로 천장 및 동선 위주로 센서를 설치합니다.</text>
+  </g>
+  
+  <!-- 주방 설치 영역 -->
+  <g id="kitchen-installation" transform="translate(410, 330)">
+    <rect width="340" height="250" fill="#e3fafc" stroke="#66d9e8" stroke-width="2" rx="10" ry="10" filter="url(#soft-shadow)"/>
+    
+    <!-- 주방 제목 -->
+    <g>
+      <rect width="340" height="30" fill="url(#kitchen-gradient)" rx="10" ry="10"/>
+      <text x="170" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">주방 설치 가이드</text>
+      <!-- 주방 아이콘 -->
+      <path d="M140 15 A5 5 0 0 0 140 15 Z" fill="#ffffff"/>
+    </g>
+    
+    <!-- 주방 그림 -->
+    <rect x="20" y="40" width="300" height="170" fill="#e9ecef" stroke="#ced4da" stroke-width="1" rx="5" ry="5"/>
+    
+    <!-- 싱크대/조리대 -->
+    <rect x="40" y="150" width="260" height="50" fill="#adb5bd" rx="5" ry="5"/>
+    <rect x="45" y="155" width="250" height="40" fill="#ced4da" rx="3" ry="3"/>
+    <circle cx="120" cy="175" r="15" fill="#868e96"/>
+    
+    <!-- 냉장고 -->
+    <rect x="40" y="70" width="70" height="70" fill="#adb5bd" rx="3" ry="3"/>
+    <rect x="45" y="75" width="60" height="60" fill="#ced4da" rx="2" ry="2"/>
+    <line x1="75" y1="75" x2="75" y2="135" stroke="#868e96" stroke-width="1"/>
+    <circle cx="70" cy="105" r="3" fill="#495057"/>
+    
+    <!-- 식탁 -->
+    <rect x="160" y="80" width="120" height="60" fill="#adb5bd" rx="3" ry="3"/>
+    <rect x="165" y="85" width="110" height="50" fill="#ced4da" rx="2" ry="2"/>
+    
+    <!-- 센서 설치 위치 표시 -->
+    <!-- 주방 센서 1: 천장 -->
+    <g transform="translate(130, 60)" filter="url(#sensor-glow)">
+      <use href="#motion-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">1</text>
+    </g>
+    
+    <line x1="142" y1="72" x2="100" y2="72" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="30" y="50" width="70" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="65" y="64" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">천장 모션 센서</text>
+    
+    <!-- 주방 센서 2: 식탁 위 -->
+    <g transform="translate(220, 60)" filter="url(#sensor-glow)">
+      <use href="#pir-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="1s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">2</text>
+    </g>
+    
+    <line x1="220" y1="72" x2="260" y2="72" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="260" y="62" width="70" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="295" y="76" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">식탁 위 센서</text>
+    
+    <!-- 주방 센서 3: 조리대 위 -->
+    <g transform="translate(150, 130)" filter="url(#sensor-glow)">
+      <use href="#sound-sensor" width="24" height="24"/>
+      <circle cx="12" cy="12" r="15" fill="#fa5252" fill-opacity="0.2">
+        <animate attributeName="r" values="15;20;15" dur="3s" repeatCount="indefinite" begin="2s"/>
+      </circle>
+      <text x="12" y="12" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">3</text>
+    </g>
+    
+    <line x1="162" y1="130" x2="190" y2="110" stroke="#c92a2a" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <rect x="190" y="100" width="110" height="20" fill="#fff9db" stroke="#fcc419" stroke-width="1" rx="10" ry="10"/>
+    <text x="245" y="114" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#e67700">조리대 위 소리 센서</text>
+    
+    <!-- 설치 가이드 노트 -->
+    <rect x="20" y="220" width="300" height="20" fill="rgba(255,255,255,0.8)" stroke="#66d9e8" stroke-width="1" rx="5" ry="5"/>
+    <text x="170" y="234" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#495057">주방은 화재나 낙상 위험이 있어 조리대 및 이동 동선에 센서 설치가 필요합니다.</text>
+  </g>
+  
+  <!-- 범례 -->
+  <g id="legend" transform="translate(200, 590)">
+    <rect width="400" height="40" rx="20" ry="20" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#soft-shadow)"/>
+    
+    <g transform="translate(30, 20)">
+      <use href="#pir-sensor" width="20" height="20"/>
+      <text x="30" y="5" font-family="Arial, sans-serif" font-size="12" fill="#343a40">PIR 센서</text>
+    </g>
+    
+    <g transform="translate(100, 20)">
+      <use href="#pressure-sensor" width="20" height="20"/>
+      <text x="30" y="5" font-family="Arial, sans-serif" font-size="12" fill="#343a40">압력 센서</text>
+    </g>
+    
+    <g transform="translate(180, 20)">
+      <use href="#motion-sensor" width="20" height="20"/>
+      <text x="30" y="5" font-family="Arial, sans-serif" font-size="12" fill="#343a40">모션 센서</text>
+    </g>
+    
+    <g transform="translate(260, 20)">
+      <use href="#sound-sensor" width="20" height="20"/>
+      <text x="30" y="5" font-family="Arial, sans-serif" font-size="12" fill="#343a40">소리 센서</text>
+    </g>
+    
+    <text x="350" y="25" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fa5252">※ 설치 높이: 바닥에서 2~2.3m</text>
+  </g>
+  
+  <!-- 접근성 정보 -->
+  <title>FallSense 센서 설치 위치 안내</title>
+  <desc>화장실, 침실, 거실, 주방의 센서 설치 위치와 권장사항에 대한 시각적 가이드입니다.</desc>
+</svg>
