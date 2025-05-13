@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FallSense - 낙상·이상행동 감지 센서 기반 노인 안전관리 시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <style>
+        .text-gradient {
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .scrolled-header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .progress-bar {
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0.25rem;
+            height: 100%;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            top: 0.5rem;
+            left: 0;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+        .team-card:hover .team-social {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .team-social {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 진행 표시줄 -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- 네비게이션 -->
+    <nav class="bg-white py-4 fixed w-full z-10 transition-all duration-300" id="mainNav">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="index.html" class="font-bold text-xl text-blue-600 flex items-center">
+                <i class="fas fa-shield-alt mr-2"></i>FallSense
+            </a>
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#overview" class="text-gray-700 hover:text-blue-600 transition-colors">개요</a>
+                <a href="#features" class="text-gray-700 hover:text-blue-600 transition-colors">주요 기능</a>
+                <a href="#background" class="text-gray-700 hover:text-blue-600 transition-colors">배경 및 목적</a>
+                <a href="#development" class="text-gray-700 hover:text-blue-600 transition-colors">개발 계획</a>
+                <a href="#team" class="text-gray-700 hover:text-blue-600 transition-colors">팀 소개</a>
+                <a href="#impact" class="text-gray-700 hover:text-blue-600 transition-colors">기대 효과</a>
+                <a href="demo.html" class="text-white bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all shadow-md hover:shadow-lg">데모 보기</a>
+            </div>
+            <button class="md:hidden text-gray-700" id="menu-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <div class="md:hidden hidden bg-white w-full" id="mobile-menu">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#overview" class="text-gray-700 hover:text-blue-600">개요</a>
+                <a href="#features" class="text-gray-700 hover:text-blue-600">주요 기능</a>
+                <a href="#background" class="text-gray-700 hover:text-blue-600">배경 및 목적</a>
+                <a href="#development" class="text-gray-700 hover:text-blue-600">개발 계획</a>
+                <a href="#team" class="text-gray-700 hover:text-blue-600">팀 소개</a>
+                <a href="#impact" class="text-gray-700 hover:text-blue-600">기대 효과</a>
+                <a href="demo.html" class="text-white bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 rounded-lg hover:from-blue-600 hover:to-cyan-600 inline-block text-center">데모 보기</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 헤더 섹션 -->
+    <header class="pt-32 pb-20 bg-gradient-to-r from-blue-500 to-cyan-500 text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <div class="w-96 h-96 rounded-full bg-white absolute -top-20 -left-20"></div>
+            <div class="w-80 h-80 rounded-full bg-white absolute top-40 right-10"></div>
+            <div class="w-64 h-64 rounded-full bg-white absolute bottom-0 left-1/4"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0" data-aos="fade-right" data-aos-duration="1000">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight animate__animated animate__fadeInUp">낙상·이상행동 감지 센서 기반 노인 안전관리 시스템</h1>
+                    <p class="text-xl opacity-90 mb-6 animate__animated animate__fadeInUp animate__delay-1s">노인 가정 및 복지시설에 설치할 수 있는 비접촉식 멀티 센서 기반 낙상 및 이상행동 감지 시스템으로, 인공지능을 활용하여 응급상황을 정확히 식별하고 신속한 알림 및 대응이 가능한 통합 안전관리 솔루션입니다.</p>
+                    <div class="flex space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
+                        <a href="detail.html" class="bg-white text-blue-600 font-medium py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md hover:shadow-lg flex items-center">
+                            <i class="fas fa-list-ul mr-2"></i> 개발 계획서(상세)
+                        </a>
+                        <a href="demo.html" class="bg-transparent border-2 border-white text-white font-medium py-2 px-6 rounded-lg hover:bg-white hover:text-blue-600 transition-colors flex items-center pulse-button">
+                            <i class="fas fa-play-circle mr-2"></i> 데모 보기
+                        </a>
+                    </div>
+                </div>
+<div class="md:w-1/2" data-aos="fade-left" data-aos-duration="1000">
+    <div class="relative">
+        <div class="absolute inset-0 bg-blue-100 rounded-lg transform rotate-3 opacity-70"></div>
+        <img src="img/fallsense-hero-image1.png" alt="FallSense: 노인 안전 케어 시스템" class="w-full h-auto rounded-lg shadow-2xl relative z-10 transform transition-transform hover:scale-105 duration-300">
+    </div>
+</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 핵심 수치 섹션 -->
+    <section class="py-10 bg-white shadow-md transform -translate-y-10 rounded-t-3xl">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div data-aos="fade-up" data-aos-delay="100" class="p-4">
+                    <div class="stat-number">30%</div>
+                    <p class="text-gray-600">65세 이상 노인의 매년 낙상 경험 비율</p>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="200" class="p-4">
+                    <div class="stat-number">3시간</div>
+                    <p class="text-gray-600">낙상 후 평균 도움 지연 시간</p>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="300" class="p-4">
+                    <div class="stat-number">10분</div>
+                    <p class="text-gray-600">FallSense 시스템의 응급 대응 시간</p>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="400" class="p-4">
+                    <div class="stat-number">70%</div>
+                    <p class="text-gray-600">기존 제품 대비 오탐지율 감소</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 개요 섹션 -->
+    <section id="overview" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gradient">프로젝트 개요</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">ICT콤플렉스 SW개발 공모전(피우다프로젝트) 참가작으로, 사회적약자 생활개선 및 복지향상을 위한 솔루션입니다.</p>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-lg" data-aos="fade-up">
+                <p class="mb-6 text-gray-700 leading-relaxed">「낙상·이상행동 감지 센서 기반 노인 안전관리 시스템」은 독거노인 및 시설 거주 노인의 낙상사고와 이상행동을 실시간으로 감지하고 즉각적인 대응을 가능하게 하는 통합 안전관리 시스템입니다.</p>
+                
+                <div class="my-8 p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border-l-4 border-blue-500">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-2 flex items-center">
+                        <i class="fas fa-award mr-2"></i> 2025 제14회 ICT콤플렉스 SW개발 공모전 (피우다프로젝트)
+                    </h3>
+                    <p class="mb-2 flex items-start">
+                        <span class="flex-shrink-0 w-28 font-bold text-gray-700">주제:</span>
+                        <span>사회적약자 생활개선 및 복지향상을 위한 SW개발</span>
+                    </p>
+                    <p class="mb-2 flex items-start">
+                        <span class="flex-shrink-0 w-28 font-bold text-gray-700">세부주제:</span>
+                        <span>2-2 가정 내(화장실 등) 응급상황(낙상 및 실신 등) 식별 및 대응 서비스</span>
+                    </p>
+                    <p class="flex items-start">
+                        <span class="flex-shrink-0 w-28 font-bold text-gray-700">팀명:</span>
+                        <span>FallSense 팀</span>
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
+                                <i class="fas fa-lightbulb text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800">문제 인식</h3>
+                        </div>
+                        <p class="text-gray-600">노인 낙상사고는 심각한 부상과 사망을 초래하며, 특히 독거노인은 응급상황 발생 시 즉각적인 도움을 받기 어렵습니다.</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
+                                <i class="fas fa-bullseye text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800">목표</h3>
+                        </div>
+                        <p class="text-gray-600">비접촉식 센서와 AI 기술을 활용하여 노인의 낙상 및 응급상황을 실시간으로 감지하고 신속한 대응이 가능한 시스템을 개발합니다.</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800">접근법</h3>
+                        </div>
+                        <p class="text-gray-600">다중 센서 융합, 에지 컴퓨팅, 인공지능을 활용하여 정확한 상황 인식과 빠른 대응이 가능한 통합 솔루션을 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 주요 기능 섹션 -->
+    <section id="features" class="py-16 bg-gradient-to-br from-gray-100 to-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gradient">주요 기능 및 특징</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">FallSense는 노인의 안전과 건강을 케어하기 위한 다양한 기능을 제공합니다.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-gradient-to-r from-blue-100 to-cyan-100 p-4 rounded-full text-blue-600 mr-4 shadow-md">
+                            <i class="fas fa-satellite-dish text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">비접촉식 다중 센서 기반 감지 시스템</h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>PIR(인체감지), 자이로(기울기), 압력, 소리 센서 등 다양한 센서 활용</li>
+                                <li>사생활 침해 없는 비접촉식 설계로 노인의 거부감 최소화 (카메라 미사용)</li>
+                                <li>화장실, 침실, 거실 등 사고 위험이 높은 공간별 맞춤형 센서 설치</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all card-hover" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-gradient-to-r from-blue-100 to-cyan-100 p-4 rounded-full text-blue-600 mr-4 shadow-md">
+                            <i class="fas fa-brain text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">AI 기반 상황 인식 및 분석</h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>딥러닝 알고리즘을 통한 낙상과 일상 동작의 정확한 구분 (오탐지 최소화)</li>
+                                <li>시간대별 생활 패턴 학습을 통한 이상행동 조기 감지</li>
+                                <li>점진적 행동 변화 감지로 건강 상태 변화 모니터링</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-gradient-to-r from-blue-100 to-cyan-100 p-4 rounded-full text-blue-600 mr-4 shadow-md">
+                            <i class="fas fa-bell text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">즉각적인 알림 및 대응 체계</h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>보호자/복지사에게 앱 푸시, 문자, 전화 등 다양한 경로로 즉시 알림</li>
+                                <li>응급 상황 자동 판단 및 119 연계 기능</li>
+                                <li>긴급도에 따른 알림 수준 차등화 (위험, 주의, 정보)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all card-hover" data-aos="fade-up" data-aos-delay="400">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-gradient-to-r from-blue-100 to-cyan-100 p-4 rounded-full text-blue-600 mr-4 shadow-md">
+                            <i class="fas fa-chart-line text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">종합 건강관리 대시보드</h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>활동량, 수면 패턴, 화장실 사용 빈도 등 일상생활 데이터 시각화</li>
+                                <li>일/주/월 단위 생활 패턴 분석 리포트 자동 생성</li>
+                                <li>센서별 상태 모니터링 및 배터리 관리 기능</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 차별성 -->
+            <div class="mt-16" data-aos="fade-up">
+                <h3 class="text-3xl font-bold text-center mb-10 text-gradient">차별성</h3>
+                <div class="bg-white p-8 rounded-xl shadow-xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="p-6 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-md card-hover" data-aos="fade-up" data-aos-delay="100">
+                            <i class="fas fa-microchip text-4xl text-blue-500 mb-4"></i>
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">기술적 차별성</h4>
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>다중 센서 융합 및 AI 분석으로 정확도 향상: 기존 단일 센서 기반 제품 대비 오탐지율 70% 감소</li>
+                                <li>에지 컴퓨팅 활용: 일부 판단을 로컬에서 처리하여 응답 속도 향상 및 데이터 보안 강화</li>
+                                <li>자가학습 알고리즘: 사용자별 행동 패턴을 학습하여 점진적으로 정확도 향상</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-md card-hover" data-aos="fade-up" data-aos-delay="200">
+                            <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">사용자 관점 차별성</h4>
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>비침투적 설계: 웨어러블 기기 착용이나 버튼 조작 불필요 (특히 인지 기능 저하 노인에게 효과적)</li>
+                                <li>직관적인 UI/UX: 디지털 기기 사용이 익숙하지 않은 노인 및 보호자도 쉽게 이용 가능</li>
+                                <li>다양한 설치 환경 지원: 가정, 요양시설, 주간보호센터 등 다양한 환경에 유연하게 적용 가능</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-md card-hover" data-aos="fade-up" data-aos-delay="300">
+                            <i class="fas fa-expand-alt text-4xl text-blue-500 mb-4"></i>
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">확장성</h4>
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>외부 스마트홈 기기와의 연동: 스마트 조명, 음성 비서 등과 연동하여 종합적인 안전 환경 구축</li>
+                                <li>API 제공: 복지기관 관리 시스템, 의료기관 EMR 등과 연동 가능한 개방형 아키텍처</li>
+                                <li>데이터 활용성: 축적된 행동 데이터를 활용한 건강 예측 모델 개발 가능</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 배경 및 목적 섹션 -->
+    <section id="background" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gradient">배경 및 목적</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">노인 인구 증가와 낙상 사고의 심각성, 고독사 문제의 심화를 해결하기 위한 기술적 솔루션입니다.</p>
+            
+            <!-- 사회적 배경 및 문제점 -->
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                    사회적 배경 및 문제점
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg" data-aos="fade-right">
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3 flex items-center">
+                            <i class="fas fa-users mr-2"></i>
+                            급격한 고령화와 독거노인 증가
+                        </h4>
+                        <div class="pl-8 border-l-4 border-blue-100">
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>우리나라 65세 이상 노인 인구는 2024년 기준 전체 인구의 19.1%이며, 2030년 25%를 넘어 초고령사회 진입 예상 (통계청, 2024)</li>
+                                <li>독거노인 가구는 2025년 223만 가구에 이를 것으로 전망 (한국보건사회연구원, 2023)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg" data-aos="fade-left">
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3 flex items-center">
+                            <i class="fas fa-heartbeat mr-2"></i>
+                            노인 낙상사고의 심각성
+                        </h4>
+                        <div class="pl-8 border-l-4 border-blue-100">
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>65세 이상 노인의 약 30%가 매년 1회 이상 낙상을 경험 (대한노인병학회, 2023)</li>
+                                <li>낙상으로 인한 사망자 중 65세 이상 노인이 80% 이상 차지 (질병관리청, 2023)</li>
+                                <li>낙상 후 골절 발생 시 40%가 이전 생활로 복귀하지 못하며, 사망률이 20% 이상 증가 (노인의료복지학회, 2024)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg" data-aos="fade-right">
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3 flex items-center">
+                            <i class="fas fa-house-user mr-2"></i>
+                            고독사 문제 심화
+                        </h4>
+                        <div class="pl-8 border-l-4 border-blue-100">
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>2023년 독거노인 고독사는 연간 3,200여 건으로 추정되며 매년 증가 추세 (경찰청 통계, 2024)</li>
+                                <li>독거노인 중 응급상황 발생 시 도움을 요청할 수 있는 수단이 없는 비율이 35% (보건복지부, 2023)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg" data-aos="fade-left">
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3 flex items-center">
+                            <i class="fas fa-ban mr-2"></i>
+                            기존 대응 체계의 한계
+                        </h4>
+                        <div class="pl-8 border-l-4 border-blue-100">
+                            <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                <li>현재 보급된 응급안전알림서비스는 설치 비용, 유지관리, 오작동 등의 문제로 보급률이 낮음</li>
+                                <li>응급호출버튼 방식은 의식이 없거나 움직일 수 없는 상황에서 작동 불가능</li>
+                                <li>CCTV 설치는 사생활 침해 우려로 노인들의 거부감이 큼</li>
+                                <li>지자체 안부확인 서비스(전화, 방문)는 실시간 대응 불가능</li>
+                                <li>웨어러블 장치는 충전, 착용 불편함으로 지속적 사용률이 낮음</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 개발 목적 -->
+            <div data-aos="fade-up">
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-bullseye"></i>
+                    </span>
+                    개발 목적
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="flip-left" data-aos-delay="100">
+                        <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-ambulance text-blue-600 text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">노인 낙상 및 응급상황의 신속한 감지와 대응</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>응급상황 발생 시 평균 대응시간을 3시간에서 10분 이내로 단축</li>
+                            <li>낙상 후 골든타임 내 치료로 합병증 및 사망률 감소</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="flip-right" data-aos-delay="200">
+                        <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-home text-blue-600 text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">노인의 독립적 생활 지원과 삶의 질 향상</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>안전하게 독립적 생활을 영위할 수 있는 환경 조성</li>
+                            <li>불필요한 시설 입소를 지연시켜 익숙한 환경에서의 생활 유지 가능</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="flip-left" data-aos-delay="300">
+                        <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-hands-helping text-blue-600 text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">보호자 및 복지사의 돌봄 부담 경감</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>24시간 상시 모니터링으로 심리적 부담 완화</li>
+                            <li>업무 효율성 증대로 더 많은 대상자에게 질 높은 서비스 제공 가능</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="flip-right" data-aos-delay="400">
+                        <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-database text-blue-600 text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">노인 건강 데이터 기반의 예방적 접근 체계 구축</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>생활패턴 변화 감지를 통한 건강 이상 징후 조기 발견</li>
+                            <li>데이터 기반 맞춤형 건강관리 서비스 제공 기반 마련</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 개발 계획 섹션 -->
+    <section id="development" class="py-16 bg-gradient-to-br from-gray-100 to-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gradient">개발 계획</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">FallSense 시스템의 체계적인 개발 절차와 일정을 소개합니다.</p>
+            
+            <!-- 개발 절차 -->
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-tasks"></i>
+                    </span>
+                    개발 절차
+                </h3>
+                
+                <div class="bg-white p-8 rounded-xl shadow-xl" data-aos="fade-up">
+                    <div class="space-y-8">
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="100">
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">① 요구사항 분석 및 설계 단계 (2025년 5월 16일 ~ 5월 28일)</h4>
+                            <div class="pl-8">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>사용자 그룹별(노인, 보호자, 복지사) 인터뷰 및 요구사항 분석</li>
+                                    <li>핵심 기능 정의 및 시스템 아키텍처 설계</li>
+                                    <li>하드웨어 및 소프트웨어 기술 검토 및 선정</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="200">
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">② 하드웨어 개발 단계 (2025년 5월 29일 ~ 6월 16일)</h4>
+                            <div class="pl-8">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>센서 모듈 설계 및 제작 (PIR, 자이로, 압력, 소리 센서 통합)</li>
+                                    <li>저전력 무선 통신 모듈 연동</li>
+                                    <li>하우징 디자인 및 내구성 확보</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="300">
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">③ 소프트웨어 개발 단계 (2025년 5월 29일 ~ 6월 20일)</h4>
+                            <div class="pl-8">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>에지 컴퓨팅 소프트웨어 개발</li>
+                                    <li>클라우드 서버 및 백엔드 개발</li>
+                                    <li>보호자용 모바일 앱, 복지사용 웹 대시보드 개발</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="400">
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">④ AI 알고리즘 개발 및 학습 (2025년 6월 1일 ~ 6월 22일)</h4>
+                            <div class="pl-8">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>다중 센서 데이터 융합 기반 낙상 감지 알고리즘 개발</li>
+                                    <li>행동 패턴 분석 및 이상행동 감지 엔진 개발</li>
+                                    <li>알고리즘 학습 및 최적화</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="500">
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">⑤ 통합 및 테스트 단계 (2025년 6월 23일 ~ 7월 20일)</h4>
+                            <div class="pl-8">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>하드웨어-소프트웨어 통합</li>
+                                    <li>성능 및 안정성 테스트 (24시간 연속 작동 테스트)</li>
+                                    <li>사용자 경험 테스트 및 피드백 수렴</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="600">
+                            <h4 class="text-xl font-semibold text-blue-600 mb-3">⑥ 최종 개발물 완성 및 검증 (2025년 7월 21일 ~ 7월 29일)</h4>
+                            <div class="pl-8">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>시스템 최적화 및 보완</li>
+                                    <li>최종 기능 검증 및 문서화</li>
+                                    <li>발표 자료 준비</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 개발 일정 -->
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    개발 일정 (간트 차트)
+                </h3>
+                
+                <div class="bg-white p-6 rounded-xl shadow-xl overflow-x-auto" data-aos="fade-up">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th class="py-3 px-4 bg-blue-50 text-left text-sm font-semibold text-blue-600 rounded-tl-lg">단계</th>
+                                <th class="py-3 px-4 bg-blue-50 text-center text-sm font-semibold text-blue-600">5월</th>
+                                <th class="py-3 px-4 bg-blue-50 text-center text-sm font-semibold text-blue-600">6월</th>
+                                <th class="py-3 px-4 bg-blue-50 text-center text-sm font-semibold text-blue-600 rounded-tr-lg">7월</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4 font-medium">요구사항 분석 및 설계</td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-full shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4"></td>
+                                <td class="py-3 px-4"></td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4 font-medium">하드웨어 개발</td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-1/6 shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-1/2 shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4"></td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4 font-medium">소프트웨어 개발</td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-1/6 shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-2/3 shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4"></td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4 font-medium">AI 알고리즘 개발</td>
+                                <td class="py-3 px-4"></td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-3/4 shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4"></td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4 font-medium">통합 및 테스트</td>
+                                <td class="py-3 px-4"></td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-1/4 shadow-sm"></div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-2/3 shadow-sm"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-medium rounded-bl-lg">최종 개발물 완성</td>
+                                <td class="py-3 px-4"></td>
+                                <td class="py-3 px-4"></td>
+                                <td class="py-3 px-4 rounded-br-lg">
+                                    <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full h-4 w-1/3 shadow-sm"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 개발 전략 -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-chess"></i>
+                    </span>
+                    개발 전략
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="h-16 w-16 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-user-cog text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">사용자 중심 개발 방법론</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>개발 전 과정에 실제 사용자(노인, 보호자, 복지사) 참여</li>
+                            <li>정기적인 피드백 수렴 및 반영으로 실용성 극대화</li>
+                            <li>특히 노인 사용자의 특성(시력, 청력, 인지능력 등)을 고려한 설계</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="h-16 w-16 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-sync-alt text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">애자일 개발 프로세스</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>2주 단위 스프린트로 빠른 프로토타입 개발 및 검증</li>
+                            <li>지속적인 통합(CI) 및 지속적인 배포(CD) 환경 구축</li>
+                            <li>문제점 조기 발견 및 수정으로 개발 효율성 증대</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="h-16 w-16 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-network-wired text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">하이브리드 에지-클라우드 아키텍처</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>에지 컴퓨팅으로 응급상황 즉시 대응 및 네트워크 단절 시에도 작동</li>
+                            <li>클라우드 서버에서 고급 분석 및 데이터 통합 처리</li>
+                            <li>효율적인 리소스 활용으로 비용 절감 및 성능 최적화</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 팀 소개 섹션 -->
+    <section id="team" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gradient">팀 소개</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">다양한 전문성을 가진 팀원들이 모여 FallSense를 개발합니다.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-3"></div>
+                    <div class="p-6">
+                        <div class="flex justify-center mb-4">
+                            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-4xl text-blue-600"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-1">박용환 </h3>
+                        <p class="text-blue-600 text-center text-sm mb-4">팀장, PM 및 시스템 아키텍트</p>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-graduation-cap text-blue-600 mt-1"></i>
+                                <p class="text-gray-700">공학대학원 PM 석사, 동 분야 경력 20년</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-cogs text-blue-600 mt-1"></i>
+                                <p class="text-gray-700">시스템 설계, 프로젝트 관리, 클라우드 아키텍처</p>
+                            </div> 
+                        </div>
+                        <div class="mt-4 team-social flex justify-center space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-blue-600"><i class="far fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-3"></div>
+                    <div class="p-6">
+                        <div class="flex justify-center mb-4">
+                            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-4xl text-blue-600"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-1">김현실</h3>
+                        <p class="text-blue-600 text-center text-sm mb-4">기획 및 UX 디자인</p>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-graduation-cap text-blue-600 mt-1"></i>
+                                <p class="text-gray-700">영상대학원 석사, 동 분야 경력 20년</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-cogs text-blue-600 mt-1"></i>
+                                <p class="text-gray-700"> UI/UX 설계, UI/UX 디자인, 게임 디자인</p>
+                            </div> 
+                        </div>
+                        <div class="mt-4 team-social flex justify-center space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-blue-600"><i class="far fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                    <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-3"></div>
+                    <div class="p-6">
+                        <div class="flex justify-center mb-4">
+                            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-4xl text-blue-600"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-1">박홍구</h3>
+                        <p class="text-blue-600 text-center text-sm mb-4">프론트엔드 개발</p>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-graduation-cap text-blue-600 mt-1"></i>
+                                <p class="text-gray-700">멀티미디어학 학사, 프론트엔드 개발자 10년 경력</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-cogs text-blue-600 mt-1"></i>
+                                <p class="text-gray-700">모바일 앱 개발, 웹 개발, UI/UX 설계</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  
+            </div>
+        </div>
+    </section>
+
+    <!-- 기대 효과 섹션 -->
+    <section id="impact" class="py-16 bg-gradient-to-br from-gray-100 to-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gradient">기대 효과</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">FallSense 시스템이 가져올 다양한 효과와 파급력에 대해 알아봅니다.</p>
+            
+            <!-- 직접적 효과 -->
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-heartbeat"></i>
+                    </span>
+                    직접적 효과
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-right" data-aos-delay="100">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-hospital text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">노인 안전과 건강 향상</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>낙상 조기 감지로 골든타임 내 대응 가능 → 합병증 및 사망률 감소
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>낙상 후 대응시간 평균 3시간에서 10분 이내로 단축 기대</li>
+                                    <li>문헌에 따르면 대응시간 60분 단축 시 사망률 30% 감소 효과</li>
+                                </ul>
+                            </li>
+                            <li>건강 이상 징후의 조기 발견 → 중증화 방지 및 예방적 건강관리
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>활동량, 수면패턴, 화장실 사용 빈도 등의 변화로 건강 상태 예측</li>
+                                    <li>심각한 상황 발생 전 적절한 의료 개입 가능</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-left" data-aos-delay="200">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-house-user text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">독거노인 고독사 예방</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>실시간 활동 감지로 위험 상황 즉시 파악 → 방치 사례 최소화
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>이상활동 감지 즉시 보호자/복지사 알림으로 신속 대응 가능</li>
+                                    <li>응급상황 자동 판단 시 119 자동 연계로 골든타임 확보</li>
+                                </ul>
+                            </li>
+                            <li>사회적 고립감 감소 및 안전망 구축
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>보호자/복지사와 지속적 연결로 심리적 안정감 제공</li>
+                                    <li>지속적인 모니터링을 통한 사회 안전망 강화</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-right" data-aos-delay="300">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-hands-helping text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">보호자 및 복지사 부담 경감</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>상시 모니터링으로 심리적 부담 완화
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>24시간 자동 모니터링으로 걱정과 불안 감소</li>
+                                    <li>위험 상황 시에만 알림을 통해 효율적 관리 가능</li>
+                                </ul>
+                            </li>
+                            <li>복지사 업무 효율성 증대
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>데이터 기반 우선순위 설정으로 효율적인 대상자 관리 가능</li>
+                                    <li>직접 방문 없이도 안부 확인 가능 → 더 많은 대상자 케어 가능</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-left" data-aos-delay="400">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-home text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">노인 자립생활 지원</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>시설 입소 없이 독립적 생활 유지 가능
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>안전 보장을 통한 자택 거주 기간 연장</li>
+                                    <li>익숙한 환경에서의 생활로 삶의 질 향상</li>
+                                </ul>
+                            </li>
+                            <li>자기효능감 및 존엄성 유지
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>타인 의존 없이 일상 유지 가능</li>
+                                    <li>프라이버시 보장으로 자율성 존중</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 사회경제적 파급효과 -->
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-chart-line"></i>
+                    </span>
+                    사회경제적 파급효과
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-coins text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">사회적 비용 절감</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>의료비 감소
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>낙상 관련 의료비용 연간 약 1조 8천억원(2023년 기준) 중 최대 30% 절감 효과</li>
+                                    <li>조기 발견 및 예방적 관리로 중증질환 발생률 감소</li>
+                                </ul>
+                            </li>
+                            <li>요양시설 입소 지연 효과
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>1인당 월평균 요양시설 비용 250만원 절감 효과</li>
+                                    <li>자립생활 기간 연장으로 사회적 부담 경감</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-hand-holding-heart text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">케어 서비스 질적 향상</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>데이터 기반 맞춤형 서비스 제공
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>개인별 생활패턴 분석을 통한 개별화된 케어 가능</li>
+                                    <li>복지서비스의 과학화 및 효율성 증대</li>
+                                </ul>
+                            </li>
+                            <li>노인복지 패러다임의 변화
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>사후 대응형에서 예방형 복지서비스로 전환</li>
+                                    <li>기술 기반 지속가능한 복지 모델 구축</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md card-hover" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-industry text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-blue-600">산업적 파급효과</h4>
+                        </div>
+                        <ul class="list-disc list-inside space-y-3 pl-4 text-gray-700">
+                            <li>실버산업 새로운 시장 창출
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>국내 스마트 헬스케어 시장 규모 확대 기여 (2025년 30조원 예상)</li>
+                                    <li>다양한 응용 서비스 및 비즈니스 모델 창출</li>
+                                </ul>
+                            </li>
+                            <li>복지-기술 융합 일자리 창출
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>기기 설치 및 관리, 데이터 분석, 서비스 운영 등 신규 일자리 발생</li>
+                                    <li>ICT 기술과 복지 서비스 융합 인력 양성</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 지속 가능성 -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 flex items-center justify-center">
+                    <span class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-seedling"></i>
+                    </span>
+                    지속 가능성 및 확장성
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="100">
+                        <div class="h-16 w-16 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-briefcase text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">사업화 가능성</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>복지기관 연계 보급 모델
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>공공기관 주도 지원사업으로 복지시설 및 취약계층 대상 보급</li>
+                                    <li>복지관, 주간보호센터 등 기존 인프라 활용한 확산</li>
+                                </ul>
+                            </li>
+                            <li>민간 서비스 모델
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>구독형 서비스(월 15,000~30,000원 수준) 운영</li>
+                                    <li>보험사 연계 서비스(보험료 할인 혜택 등)로 확산</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="200">
+                        <div class="h-16 w-16 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-expand-arrows-alt text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-sem`,
+  `startLine`: `1` ibold text-blue-600 mb-3">확장 가능성</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>서비스 대상 확장
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>노인 외 장애인, 만성질환자 등으로 확대 가능</li>
+                                    <li>아동 안전 등 다양한 취약계층 보호 시스템으로 응용</li>
+                                </ul>
+                            </li>
+                            <li>기능 확장
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>약 복용 관리, 식사 관리 등 종합 건강관리 시스템으로 확장</li>
+                                    <li>음성 인식, 대화형 AI 등 추가 기능 통합으로 지능형 돌봄 시스템 구축</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="300">
+                        <div class="h-16 w-16 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-sync-alt text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-600 mb-3">지속 가능 전략</h4>
+                        <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                            <li>데이터 기반 지속적 고도화
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>수집된 데이터 활용한 알고리즘 개선 및 기능 향상</li>
+                                    <li>사용자 피드백 반영한 UI/UX 개선</li>
+                                </ul>
+                            </li>
+                            <li>커뮤니티 기반 발전
+                                <ul class="list-circle list-inside pl-6 space-y-1 text-gray-600 text-sm">
+                                    <li>사용자 및 복지사 커뮤니티 운영으로 피드백 수렴</li>
+                                    <li>오픈소스 방식의 일부 코드 공개로 생태계 조성</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="py-16 bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">함께 노인 안전과 복지를 개선합니다</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">FallSense는 노인의 안전한 생활과 삶의 질 향상을 위한 혁신적인 솔루션입니다. 저희와 함께 더 나은 미래를 만들어가세요.</p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                <a href="demo.html" class="bg-white text-blue-600 font-medium py-3 px-8 rounded-lg hover:bg-blue-50 transition-colors shadow-md hover:shadow-lg">데모 보기</a>
+                <a href="detail.html" class="bg-transparent border-2 border-white text-white font-medium py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-colors">자세히 알아보기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <h3 class="text-2xl font-bold text-gradient-white mb-4">FallSense 팀</h3>
+                    <p class="mb-2">ICT콤플렉스 SW개발 공모전 「피우다프로젝트」</p>
+                    <p class="text-gray-400">사회적약자 생활개선 및 복지향상을 위한 SW개발</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">프로젝트</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#overview" class="text-gray-400 hover:text-white transition-colors">개요</a></li>
+                            <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">주요 기능</a></li>
+                            <li><a href="#background" class="text-gray-400 hover:text-white transition-colors">배경 및 목적</a></li>
+                            <li><a href="#development" class="text-gray-400 hover:text-white transition-colors">개발 계획</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">팀 소개</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#team" class="text-gray-400 hover:text-white transition-colors">팀원 소개</a></li>
+                            <li><a href="#impact" class="text-gray-400 hover:text-white transition-colors">기대 효과</a></li>
+                            <li><a href="demo.html" class="text-gray-400 hover:text-white transition-colors">데모 보기</a></li>
+                            <li><a href="detail.html" class="text-gray-400 hover:text-white transition-colors">상세 계획</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">연락처</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-center">
+                                <i class="far fa-envelope mr-2 text-gray-400"></i>
+                                <a href="mailto:sanoramyun8@gmail.com" class="text-gray-400 hover:text-white transition-colors">sanoramyun8@gmail.com</a>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-phone-alt mr-2 text-gray-400"></i>
+                                <a href="tel:+821079393123" class="text-gray-400 hover:text-white transition-colors">010-7939-3123</a>
+                            </li>
+                        </ul>
+                        <div class="mt-4 flex space-x-4">
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center text-sm text-gray-400">
+                <p>© 2025 FallSense 팀. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 맨 위로 버튼 -->
+    <button id="back-to-top" class="fixed bottom-5 right-5 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 transition-opacity duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        // AOS 초기화
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // 모바일 메뉴 토글
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // 스크롤 진행 표시줄
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            
+            // 스크롤 시 헤더 스타일 변경
+            if (window.scrollY > 50) {
+                document.getElementById('mainNav').classList.add('scrolled-header');
+            } else {
+                document.getElementById('mainNav').classList.remove('scrolled-header');
+            }
+            
+            // 맨 위로 스크롤 버튼 표시/숨김
+            if (window.scrollY > 500) {
+                document.getElementById('back-to-top').style.opacity = "1";
+            } else {
+                document.getElementById('back-to-top').style.opacity = "0";
+            }
+        });
+        
+        // 맨 위로 스크롤 버튼 클릭 이벤트
+        document.getElementById('back-to-top').addEventListener('click', function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+        
+        // 메뉴 링크 클릭 시 모바일 메뉴 닫기
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // 스무스 스크롤 구현
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
